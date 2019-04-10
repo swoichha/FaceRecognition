@@ -1,0 +1,4 @@
+mkdir s01 to create a new directory called s01
+copy subject01* .\s01 copy files name begining from subject01 to folder s01
+crop image
+'subject01*' -crop 320x243+100-10 subject%02d.gif
