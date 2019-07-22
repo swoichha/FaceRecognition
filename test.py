@@ -27,6 +27,10 @@ for f in os.listdir('.'):
                 cropped_image = img.crop((100, 10, 320, 243))
                 cropped_image.save(new_filename)
 
+#to plot values import matplotlib.pyplot as plt
+plt.plot(x,y,'ro')
+plt.show()               
+
 # crop_image(i, crop_area, new_filename)
         # print(ext)
         # i.save('cropped/{}.jpg'.format(fn))
