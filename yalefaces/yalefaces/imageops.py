@@ -65,13 +65,17 @@ plt.imshow(resized_avg_faceVector,cmap='gray')
 plt.show()
 
 
-
+#------Normalize face vector
 i = 0
 while (i < img_count): 
 	normalize_face_vector = np.array(imageArray[i] - avg_faceVector)
 	normalize_face_vector = np.reshape(normalize_face_vector,(233,220))
 	i += 1
-	plt.imshow(normalize_face_vector,cmap='gray')
-	plt.show()
+	# plt.imshow(normalize_face_vector,cmap='gray')
+	# plt.show()
+
+#------covariance of matrix	is done to find eigen vector
+covariance_Matrix = np.cov(normalize_face_vector)	
+print('\n covariance matrix \n',covariance_Matrix)
 
 	
