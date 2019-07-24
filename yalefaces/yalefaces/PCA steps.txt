@@ -1,0 +1,9 @@
+PCA Steps
+1. Standardize the data.
+2. Use the standardized data to create a covariance matrix.
+3. Use the resulting matrix to calculate eigenvectors (principal components) and 
+	their corresponding eigenvalues.
+4. Sort the components in decending order by its eigenvalue.
+5. Choose n components which explain the most variance within the 
+	data (larger eigenvalue means the feature explains more variance).
+6. Create a new matrix using the n components.

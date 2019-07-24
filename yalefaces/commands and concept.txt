@@ -1,4 +1,4 @@
-each pixelfor machine leaning algorithm will be a feature
+each pixel for machine leaning algorithm will be a feature
 there could be an latent/inherent strucutre that we could extract from the data 
 which would result in a much lower dimensional representation of our original picture
 PCA trying  to find direction which are orthogonal to each other
