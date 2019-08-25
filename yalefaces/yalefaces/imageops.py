@@ -17,7 +17,10 @@ global normalize_face_vector
 img_count = 0
 directory = ""
 imageArray = np.zeros((150,51260),dtype=np.uint8, order='C')	#Whether to store multi-dimensional data in row-major (C-style) or column-major (Fortran-style) order in memory.
-normalize_face_vector = np.zeros((150,51260),dtype=np.int8, order='C')
+normalize_face_vector = np.zeros((150,51260), order='C')
+k_eigenvector = np.zeros((10,51260), order='C')
+
+
 # resized_normalize_face_vector = np.zeros((150,51260),dtype=np.uint8, order='C')
 # imageArray = imageArray.reshape(150,51260,1)			#150 elements with 51260 rows ans 1 column
 
@@ -62,20 +65,26 @@ while (i < img_count):
 	# print('\n normalize_face_vector of image',i,'is', normalize_face_vector[i])
 	resized_normalize_face_vector = np.reshape(normalize_face_vector[i],(233,220))
 	i += 1
-	plt.imshow(resized_normalize_face_vector,cmap='gray')
-	plt.show()
+	# plt.imshow(resized_normalize_face_vector,cmap='gray')
+	# plt.show()
 
 
-
+print('\n minimum value:',np.min(normalize_face_vector[2]))
+print('\n shape of 148th image:  \n',len(normalize_face_vector[148]))
+# print('\n shape of 148th image:  \n',normalize_face_vector[148].shape)
+print('\n shape as a whole :\n',normalize_face_vector.shape)
 
 #-------covariance of matrix is done to find eigen vector. total 150 eigen vectors each of dimension 150*1
 covariance_Matrix = np.cov(normalize_face_vector)
 print('\n covariance matrix of 148th image:\n',covariance_Matrix[148].shape)		#-----gives dimension 150*1 covariance value of 148th image
-print('\n shape of covariance matrix  as a whole of shape',covariance_Matrix.shape, '\n',covariance_Matrix)				#-----150*150-----#
+print('\n shape of covariance matrix  as a whole of shape',covariance_Matrix.shape, 
+'\n \n The covariance matrix is: \n \n',covariance_Matrix)				#-----150*150-----#
 
 #--------eigen values and faces-----------
 print('\n minimum value:',np.min(covariance_Matrix))
 eigenvalue,eigenvector = LA.eig(covariance_Matrix)
+print(len(eigenvalue))
+
 print('\n Eigen values are: \n',eigenvalue)
 print('\n Eigen vector are: \n',eigenvector)
 
@@ -83,11 +92,29 @@ print('\n Eigen vector are: \n',eigenvector)
 eig_pairs = [(np.abs(eigenvalue[i]), eigenvector[:,i]) for i in range(len(eigenvalue))]
 
 # Sort the (eigenvalue, eigenvector) tuples from high to low
-eig_pairs.sort(key=lambda x: x[0], reverse=True)
+eig_pairs.sort(key=lambda x: x[0], reverse=True) 
 
 # Visually confirm that the list is correctly sorted by decreasing eigenvalues
 print('\n \n Eigenvalues in descending order:\n')
 for i in eig_pairs:
-    print(i[0])
+    print(i[0])		#prints eigen value as it is in first column and eigen vector is in 2nd column
+
+
+
+#-----select k eigen faces such that k<m i.e k<150 and can represent the whole training set
+tot = sum(eigenvalue)
+var_exp = [(i / tot)*100 for i in sorted(eigenvalue, reverse=True)]
+cum_var_exp = np.cumsum(var_exp)
+# print ("Variance captured by each component is \n",var_exp)
+print(40 * '-')
+print ("Cumulative variance captured as we travel each component \n",cum_var_exp)
 
 	
+print ("All Eigen Values along with Eigen Vectors")
+# print(print(eig_pairs))
+print(40 * '-' )
+
+
+
+
+
