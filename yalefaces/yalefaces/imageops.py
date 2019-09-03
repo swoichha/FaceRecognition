@@ -18,7 +18,8 @@ img_count = 0
 directory = ""
 imageArray = np.zeros((150,51260),dtype=np.uint8, order='C')	#Whether to store multi-dimensional data in row-major (C-style) or column-major (Fortran-style) order in memory.
 normalize_face_vector = np.zeros((150,51260), order='C')
-k_eigenvector = np.zeros((10,51260), order='C')
+k_eigenvector = np.zeros((11,51260), order='C')
+
 
 
 # resized_normalize_face_vector = np.zeros((150,51260),dtype=np.uint8, order='C')
@@ -107,13 +108,80 @@ var_exp = [(i / tot)*100 for i in sorted(eigenvalue, reverse=True)]
 cum_var_exp = np.cumsum(var_exp)
 # print ("Variance captured by each component is \n",var_exp)
 print(40 * '-')
-print ("Cumulative variance captured as we travel each component \n",cum_var_exp)
+# print ("Cumulative variance captured as we travel each component \n",cum_var_exp)
 
 	
 print ("All Eigen Values along with Eigen Vectors")
 # print(print(eig_pairs))
 print(40 * '-' )
+matrix_w = np.hstack((eig_pairs[0][1].reshape(150,1),
+                      eig_pairs[1][1].reshape(150,1),
+                      eig_pairs[2][1].reshape(150,1),
+                      eig_pairs[3][1].reshape(150,1),
+                      eig_pairs[4][1].reshape(150,1),
+                      eig_pairs[5][1].reshape(150,1),
+                      eig_pairs[6][1].reshape(150,1),
+                      eig_pairs[7][1].reshape(150,1),
+                      eig_pairs[8][1].reshape(150,1),
+                      eig_pairs[9][1].reshape(150,1),
+                      eig_pairs[10][1].reshape(150,1),
+                      eig_pairs[11][1].reshape(150,1),
+                      eig_pairs[12][1].reshape(150,1),
+                      eig_pairs[13][1].reshape(150,1),
+                      eig_pairs[14][1].reshape(150,1),
+                      eig_pairs[15][1].reshape(150,1),
+                      eig_pairs[16][1].reshape(150,1),
+                      eig_pairs[17][1].reshape(150,1),
+                      eig_pairs[18][1].reshape(150,1),
+                      eig_pairs[19][1].reshape(150,1),
+                      eig_pairs[20][1].reshape(150,1),
+                      eig_pairs[21][1].reshape(150,1),
+                      eig_pairs[22][1].reshape(150,1),
+                      eig_pairs[23][1].reshape(150,1)))
+# print(eigenvector[10].shape)
+# print(np.array_equal((eig_pairs[0][1]),matrix_w[:,0]))	
+# print ('Matrix W:\n', matrix_w)
 
+imageArrayTranspose = np.transpose(imageArray)
+print(imageArrayTranspose.shape)
+
+Y = imageArrayTranspose.dot(matrix_w)
+print(Y.shape)
+
+k_eigenvector = np.transpose(Y)
+print(k_eigenvector.shape) 
+print(np.array_equal((Y[:,0]),k_eigenvector[0,:]))
+print(normalize_face_vector.shape)
+
+
+# for i in range(len(k_eigenvector)):
+
+# 	resized_eigenvector = np.array(np.reshape(k_eigenvector[i],(233,220)), dtype=float)
+# 	i += 1
+# 	print(i)
+# 	# plt.imshow(resized_eigenvector,cmap='gray')
+# 	# plt.show()
+
+# wcoeff = pca(matrix_w)
+# print(wcoeff)
+
+normalize_face_vector_Transpose = np.transpose(normalize_face_vector)
+print(normalize_face_vector_Transpose.shape)
+
+weigth_coeff = np.zeros((150,24),dtype=np.complex128, order='C')
+# wcoeff = np.zeros((150,11),dtype=np.uint8, order='C')
+for i in range(img_count):
+	weigth_coeff[i] = np.array(k_eigenvector.dot(normalize_face_vector_Transpose[:,i]))
+print(weigth_coeff[2])
+
+
+# print(matrix_w.shape)
+
+print(weigth_coeff.shape)
+testImg = np.array((weigth_coeff[0].dot(k_eigenvector)),dtype = float)
+plotImg = np.reshape(testImg,(233,220))
+plt.imshow(plotImg,cmap='gray')
+plt.show()
 
 
 
